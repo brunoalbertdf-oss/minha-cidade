@@ -1,0 +1,355 @@
+/* ===== A Cidade da Lia — visual ===== */
+/* Cores dos botões e destaques: rosa e lilás para menina; a versão menino troca por azul (familias.css) */
+:root {
+  --cor: #ff4d8d; --cor-clara: #ff7eb6; --cor-escura: #c9306a; --cor-fundo: #ffe3f1; --cor-borda: #ff8fc8;
+  --cor-sombra: #ffc8dd; --cor-sombra2: #ffb3d1;
+  --cor2: #c77dff; --cor2-escura: #9d4edd; --cor2-funda: #6a2fb0; --cor2-clara: #b388ff; --cor2-sombra: #e0c3fc;
+  --fundo-loja1: #e7dcff; --fundo-loja2: #ffe0f0;
+}
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body {
+  margin: 0; height: 100%; overflow: hidden; background: #7ec8ff;
+  font-family: "Trebuchet MS", "Segoe UI", Roboto, sans-serif; font-size: 3vmin; color: #3d2c5e;
+  user-select: none; -webkit-user-select: none; touch-action: manipulation;
+}
+button { font: inherit; color: inherit; border: 0; background: none; cursor: pointer; padding: 0; }
+svg { display: block; width: 100%; height: 100%; }
+#app { position: fixed; inset: 0; overflow: hidden; }
+
+/* ---------- Botões e caixas ---------- */
+.btn {
+  background: linear-gradient(var(--cor-clara), var(--cor)); color: #fff; font-weight: 800; font-size: 1.15em;
+  padding: .55em 1.1em; border-radius: 1em; box-shadow: 0 .3em 0 var(--cor-escura); text-shadow: 0 2px 0 rgba(0,0,0,.15);
+  transition: transform .1s;
+}
+.btn:active { transform: translateY(.2em); box-shadow: 0 .1em 0 var(--cor-escura); }
+.btn.verde { background: linear-gradient(#5be38a, #20c05c); box-shadow: 0 .3em 0 #128a3e; }
+.btn.cinza { background: linear-gradient(#c8c8d8, #a3a3b8); box-shadow: 0 .3em 0 #7b7b90; }
+.btn.vermelho { background: linear-gradient(#ff7b7b, #e63946); box-shadow: 0 .3em 0 #a4202b; }
+.btn-grande { font-size: 1.6em; }
+
+.balao {
+  background: #fff; border-radius: 1em; padding: .6em .9em; font-weight: 700; position: relative;
+  box-shadow: 0 .25em .6em rgba(0,0,0,.15); line-height: 1.25;
+}
+
+.topo {
+  position: absolute; top: 0; left: 0; right: 0; height: 11vh; z-index: 20;
+  display: flex; align-items: center; justify-content: space-between; gap: 1em; padding: 0 1.5vw;
+  background: rgba(255,255,255,.85); border-bottom: .3vmin solid rgba(0,0,0,.06);
+}
+.topo .titulo { font-weight: 900; font-size: 1.3em; text-align: center; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.btn-voltar { font-size: 1em; padding: .45em .9em; background: linear-gradient(#7ec8ff, #3a86ff); box-shadow: 0 .3em 0 #2459b3; }
+.moedas { background: #fff7d1; border: .4vmin solid #ffd60a; border-radius: 2em; padding: .3em .8em; font-weight: 900; font-size: 1.2em; white-space: nowrap; }
+.moedas.grande { font-size: 1.5em; }
+
+.cena { position: absolute; top: 11vh; left: 0; right: 0; bottom: 0; overflow: hidden; }
+
+/* ---------- Animações ---------- */
+@keyframes pulo { 0%,100% { transform: translateY(0) } 40% { transform: translateY(-12%) } }
+@keyframes tremer { 0%,100% { transform: translateX(0) } 20%,60% { transform: translateX(-8px) } 40%,80% { transform: translateX(8px) } }
+@keyframes pulsar { 0%,100% { transform: scale(1) } 50% { transform: scale(1.08) } }
+@keyframes flutuar { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-6px) } }
+@keyframes cair { from { transform: translateY(-10vh) rotate(0) } to { transform: translateY(110vh) rotate(540deg) } }
+@keyframes subir { from { opacity: 1; transform: translate(-50%,0) scale(1) } to { opacity: 0; transform: translate(-50%,-14vh) scale(1.4) } }
+@keyframes balancar { 0%,100% { transform: rotate(-12deg) } 50% { transform: rotate(16deg) } }
+@keyframes nadar { from { left: -10% } to { left: 110% } }
+@keyframes nuvem { from { transform: translateX(-20vw) } to { transform: translateX(110vw) } }
+.pulo { animation: pulo .45s ease; }
+.tremer { animation: tremer .4s ease; }
+.pulsar { animation: pulsar 1s ease-in-out infinite; }
+.pulando { animation: flutuar 1.6s ease-in-out infinite; }
+.dica { animation: pulsar .7s ease-in-out infinite; box-shadow: 0 0 0 .6vmin #ffd60a, 0 0 2vmin #ffd60a !important; }
+
+.confete { position: fixed; top: 0; z-index: 200; pointer-events: none; animation: cair 2.8s linear forwards; }
+.ganho { position: fixed; left: 50%; top: 40%; z-index: 210; font-size: 8vmin; font-weight: 900; color: #ffb703; text-shadow: 0 .4vmin 0 #fff, 0 0 2vmin #fff; pointer-events: none; animation: subir 1.6s ease-out forwards; }
+.coracao { position: fixed; z-index: 150; font-size: 5vmin; pointer-events: none; animation: subir 1.6s ease-out forwards; }
+.voando { position: fixed; z-index: 150; font-size: 9vmin; transform: translate(-50%,-50%); transition: all .65s ease-in; pointer-events: none; }
+.aviso {
+  position: fixed; left: 50%; top: 13vh; transform: translateX(-50%); z-index: 180; max-width: 80vw;
+  background: #fff; border: .5vmin solid var(--cor-borda); border-radius: 1em; padding: .6em 1.2em; font-weight: 800; font-size: 1.2em;
+  box-shadow: 0 1vmin 3vmin rgba(0,0,0,.2); text-align: center; animation: pulo .4s;
+}
+
+/* ---------- Modal ---------- */
+.modal-fundo { position: fixed; inset: 0; z-index: 160; background: rgba(40,20,70,.45); display: flex; align-items: center; justify-content: center; }
+.modal {
+  background: #fff; border-radius: 4vmin; padding: 3vmin 4vmin; max-width: 86vw; max-height: 92vh; overflow: auto; text-align: center;
+  box-shadow: 0 2vmin 6vmin rgba(0,0,0,.3); animation: pulo .4s; min-width: 40vw;
+}
+.modal h2 { margin: .3em 0; font-size: 1.8em; color: var(--cor); }
+.modal p { font-size: 1.2em; margin: .4em 0; }
+.modal .termo { margin: 1em auto; max-width: 50vw; }
+.modal-botoes { display: flex; gap: 2vmin; justify-content: center; flex-wrap: wrap; margin-top: 2.5vmin; }
+.modal-emoji { font-size: 12vmin; line-height: 1.1; }
+.modal-emoji.grande { font-size: 20vmin; }
+.modal-pais { display: flex; align-items: center; justify-content: center; gap: 2vmin; }
+.pessoa-modal { width: 16vmin; height: 26vmin; animation: flutuar 1.6s ease-in-out infinite; }
+.coracao-grande { font-size: 9vmin; animation: pulsar .8s infinite; }
+.destaque { color: #20a05c; font-weight: 900; font-size: 1.4em !important; }
+.pequeno { font-size: .95em !important; opacity: .85; }
+
+/* ---------- Termômetro e barras ---------- */
+.termo { display: flex; align-items: center; gap: 1vmin; }
+.termo-pais { display: flex; align-items: center; gap: .3vmin; }
+.rostinho { width: 6.5vmin; height: 7vmin; }
+.termo-cara { font-size: 1.6em; margin-left: .3vmin; }
+.termo-barra { position: relative; flex: 1; height: 3.4vmin; min-width: 22vmin; background: #eee; border-radius: 2vmin; border: .4vmin solid #fff; box-shadow: inset 0 .3vmin .6vmin rgba(0,0,0,.15); }
+.termo-cheio { height: 100%; border-radius: 2vmin; background: linear-gradient(90deg, #6ec6ff, #ffd60a, var(--cor)); transition: width .6s; }
+.termo-marca { position: absolute; top: -2.2vmin; transform: translateX(-50%); font-size: 2.6vmin; border-left: .4vmin dashed #20a05c; padding-left: .3vmin; height: 6vmin; line-height: 2vmin; }
+.barra { display: flex; align-items: center; gap: .6vmin; font-weight: 800; font-size: .9em; }
+.barra-fundo { width: 14vmin; height: 2.2vmin; background: #eee; border-radius: 2vmin; overflow: hidden; }
+.barra-cheia { height: 100%; border-radius: 2vmin; transition: width .5s; }
+
+/* ---------- Tela inicial ---------- */
+.inicio {
+  position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  background: linear-gradient(#7ec8ff 0%, #bfe6ff 55%, #8ee07a 55%, #5cc96b 100%);
+}
+.logo { font-size: 10vmin; margin: 0; color: #fff; font-weight: 900; text-shadow: 0 1vmin 0 var(--cor), 0 1.6vmin 2vmin rgba(0,0,0,.2); letter-spacing: .3vmin; z-index: 1; }
+.logo span { color: #ffe066; }
+.inicio-turma { display: flex; align-items: flex-end; height: 50vh; margin: 1vh 0 3vh; z-index: 1; }
+.inicio-crianca { width: 30vh; height: 46vh; }
+.inicio-batata { width: 30vh; height: 24vh; margin-left: -2vh; }
+.btn-jogar { font-size: 2.2em; padding: .4em 1.6em; z-index: 1; }
+.nuvem { position: absolute; font-size: 14vmin; opacity: .9; animation: nuvem 40s linear infinite; }
+
+/* ---------- Mapa ---------- */
+.mapa {
+  position: absolute; inset: 0;
+  background: radial-gradient(circle at 20% 30%, #9be58a 0, transparent 30%), radial-gradient(circle at 60% 80%, #9be58a 0, transparent 30%), #7fd36f;
+}
+.mar { position: absolute; top: 0; bottom: 0; right: 0; width: 23%; background: linear-gradient(90deg, #ffe8a3 0 6%, #5ec8f2 6%, #2f9be0); overflow: hidden; }
+.peixe { position: absolute; font-size: 5vmin; animation: nadar 14s linear infinite; }
+.rua { position: absolute; left: 0; width: 78%; top: 52%; height: 7%; background: #8a8fa3; border-top: .6vmin solid #d9dbe3; border-bottom: .6vmin solid #d9dbe3; }
+.rua::after { content: ""; position: absolute; left: 2%; right: 2%; top: 50%; border-top: .7vmin dashed #fff; }
+.ponte { position: absolute; left: 77%; width: 7%; top: 53%; height: 5%; background: repeating-linear-gradient(90deg, #b07a4a 0 2vmin, #8d5a3b 2vmin 2.4vmin); border-radius: .5vmin; }
+.decor { position: absolute; font-size: 6vmin; transform: translate(-50%,-50%); pointer-events: none; }
+.lugar { position: absolute; transform: translate(-50%,-50%); width: min(17vw, 27vh); display: flex; flex-direction: column; align-items: center; }
+.lugar .predio { width: 100%; aspect-ratio: 160/140; transition: transform .2s; }
+.lugar:active .predio { transform: scale(.94); }
+.placa { margin-top: -.6vmin; background: #fff; border-radius: 1em; padding: .2em .7em; font-weight: 900; font-size: .9em; box-shadow: 0 .4vmin 0 rgba(0,0,0,.15); text-align: center; line-height: 1.1; }
+.lugar.fechado .predio { filter: grayscale(.6) brightness(.9); }
+.selo { position: absolute; top: 0; right: 4%; font-size: 6vmin; animation: pulsar 1s infinite; }
+.selo.alerta { right: 8%; }
+.crianca-mapa { position: absolute; left: 1%; top: 38%; width: 7vmin; height: 12vmin; }
+.batata-mapa { position: absolute; left: 21%; top: 41%; width: 11vmin; height: 9vmin; }
+.batata-mapa > div:first-child { width: 100%; height: 100%; }
+.pede { position: absolute; top: -5vmin; left: 2vmin; background: #fff; border-radius: 50%; width: 5vmin; height: 5vmin; display: flex; align-items: center; justify-content: center; font-size: 3vmin; animation: pulsar 1s infinite; }
+.hud {
+  position: absolute; top: 1.5vh; left: 1.5vw; right: 24.5%; display: flex; align-items: center; justify-content: space-between; gap: 2vmin;
+  background: rgba(255,255,255,.85); border-radius: 3vmin; padding: 1vmin 2vmin; box-shadow: 0 .6vmin 0 rgba(0,0,0,.08);
+}
+.hud-termo { flex: 1; max-width: 46vw; }
+.hud-batata { display: flex; align-items: center; gap: 1vmin; }
+.mini-batata { width: 9vmin; height: 7vmin; }
+.btn-engrenagem { position: absolute; top: 1.5vh; right: 1.5vw; font-size: 5vmin; background: rgba(255,255,255,.8); border-radius: 50%; width: 8vmin; height: 8vmin; }
+.hud .btn-engrenagem { position: fixed; }
+
+/* ---------- Quarto ---------- */
+.quarto .parede { position: absolute; left: 0; right: 0; top: 0; height: 55%; background: repeating-linear-gradient(90deg, #ffd6e8 0 4vmin, #ffe3ef 4vmin 8vmin); }
+.quarto .chao { position: absolute; left: 0; right: 0; bottom: 0; height: 45%; background: repeating-linear-gradient(90deg, #e0b483 0 9vmin, #d4a373 9vmin 9.4vmin); }
+.janela { position: absolute; left: 25%; top: 8%; width: 16vmin; height: 14vmin; background: #bfe6ff; border: 1.2vmin solid #fff; border-radius: 1vmin; font-size: 8vmin; display: flex; align-items: center; justify-content: center; }
+.quadro-parede { position: absolute; left: 42%; top: 10%; font-size: 7vmin; background: #fff; border: .8vmin solid #ffb703; padding: .2vmin 1vmin; border-radius: .6vmin; }
+.prateleira { position: absolute; right: 3%; top: 6%; width: 40%; min-height: 9vmin; border-bottom: 1.4vmin solid #a0522d; display: flex; align-items: flex-end; justify-content: center; flex-wrap: wrap; gap: .5vmin; font-size: 6vmin; padding: 0 1vmin; }
+.prateleira small { font-size: 2.2vmin; opacity: .6; padding-bottom: 1vmin; }
+.movel { position: absolute; display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 2vmin; transition: transform .2s; }
+.movel-icone { font-size: 9vmin; line-height: 1; }
+.movel-nome { background: #fff; border-radius: 1em; padding: .1em .6em; font-weight: 900; font-size: .85em; margin-top: .5vmin; }
+.estante { left: 3%; top: 10%; width: 15%; height: 47%; background: #b5784a; border: 1vmin solid #8d5a3b; }
+.cesto { left: 59%; top: 34%; width: 15%; height: 24%; background: #f6d6a8; border: .8vmin dashed #c99a5b; }
+.bau { left: 79%; top: 32%; width: 17%; height: 26%; background: #ff9f43; border: 1vmin solid #e17a17; }
+.cama { position: absolute; left: 22%; top: 28%; width: 33%; height: 36%; cursor: pointer; }
+.cama-cabeceira { position: absolute; left: 0; top: 0; width: 12%; height: 100%; background: #ff8fc8; border-radius: 2vmin 2vmin .5vmin .5vmin; }
+.cama-colchao { position: absolute; left: 6%; right: 0; top: 40%; height: 46%; background: #fff; border-radius: 1.5vmin; box-shadow: 0 1.5vmin 0 #c77dff; }
+.travesseiro { position: absolute; left: 12%; top: 26%; width: 22%; height: 22%; background: #fff; border: .5vmin solid #eee; border-radius: 2vmin; transition: all .5s; transform: rotate(-25deg) translate(10%, -40%); }
+.coberta { position: absolute; left: 30%; right: 0; top: 36%; height: 50%; background: repeating-linear-gradient(45deg, #b388ff 0 2vmin, #c9a7ff 2vmin 4vmin); border-radius: 1.5vmin; transition: all .5s; transform: rotate(14deg) translate(8%, 30%); }
+.cama.feita .travesseiro { transform: none; }
+.cama.feita .coberta { transform: none; }
+.cama:not(.feita)::after { content: "👆 Toque para arrumar"; position: absolute; top: -9%; left: 50%; transform: translateX(-50%); background: #fff; border-radius: 1em; padding: .1em .6em; font-weight: 900; font-size: .85em; white-space: nowrap; animation: pulsar 1s infinite; }
+.bagunca { position: absolute; font-size: 9vmin; transform: rotate(var(--r)); touch-action: none; cursor: grab; z-index: 5; filter: drop-shadow(0 .6vmin 0 rgba(0,0,0,.15)); line-height: 1; margin: -4.5vmin 0 0 -4.5vmin; }
+.bagunca.arrastando { z-index: 50; filter: drop-shadow(0 2vmin 1vmin rgba(0,0,0,.25)); }
+.bagunca.guardado { transition: transform .35s, opacity .35s !important; transform: scale(0) !important; opacity: 0; }
+.crianca-quarto { position: absolute; left: 8%; bottom: 8%; width: 18vmin; height: 28vmin; }
+.painel-info { position: absolute; left: 50%; top: 52%; transform: translate(-50%,-50%); background: #fff; border-radius: 4vmin; padding: 3vmin 5vmin; text-align: center; box-shadow: 0 2vmin 5vmin rgba(0,0,0,.2); z-index: 10; max-width: 70vw; }
+.painel-info h2 { color: var(--cor); margin: .2em 0; font-size: 1.7em; }
+.painel-info p { font-size: 1.15em; }
+
+/* ---------- Escola ---------- */
+.escola { background: linear-gradient(#fff3c4 0 70%, #d4a373 70%); }
+.prof { position: absolute; left: 2%; top: 4%; width: 25%; display: flex; flex-direction: column; align-items: center; gap: 1vmin; }
+.prof-emoji { font-size: 17vmin; line-height: 1; }
+.prof .balao { font-size: 1.05em; text-align: center; }
+.estrelas { position: absolute; right: 3%; top: 4%; font-size: 5vmin; filter: grayscale(1) opacity(.35); }
+.estrelas span.on { filter: none; }
+.estrelas span { display: inline-block; }
+.estrelas { filter: none; }
+.estrelas span:not(.on) { filter: grayscale(1) opacity(.3); }
+.quadro-negro {
+  position: absolute; left: 30%; right: 3%; top: 14%; height: 44%; background: #2d6a4f; border: 1.6vmin solid #a0522d; border-radius: 2vmin;
+  display: flex; align-items: center; justify-content: center; gap: 4vmin; transition: background .3s;
+}
+.quadro-negro.acertou { background: #40916c; }
+.figura { font-size: 18vmin; line-height: 1; filter: drop-shadow(0 .6vmin 0 rgba(0,0,0,.3)); }
+.figura-desenho { width: 17vmin; height: 27vmin; }
+.slots { display: flex; gap: 1.5vmin; }
+.slot { min-width: 14vmin; height: 14vmin; border: .7vmin dashed rgba(255,255,255,.7); border-radius: 2vmin; display: flex; align-items: center; justify-content: center; font-size: 7vmin; font-weight: 900; color: #fff; padding: 0 1vmin; }
+.slot.cheio { border-style: solid; background: rgba(255,255,255,.15); animation: pulo .35s; }
+.btn-som { font-size: 6vmin; background: #fff; border-radius: 50%; width: 10vmin; height: 10vmin; }
+.silabas { position: absolute; left: 30%; right: 3%; bottom: 6%; display: flex; justify-content: center; gap: 2.5vmin; flex-wrap: wrap; }
+.silaba { min-width: 15vmin; height: 15vmin; padding: 0 2vmin; font-size: 7vmin; font-weight: 900; background: #fff; border-radius: 2.5vmin; box-shadow: 0 1vmin 0 var(--cor-sombra2); color: var(--cor); }
+.silaba:nth-child(3n+2) { color: #3a86ff; box-shadow: 0 1vmin 0 #a9cbff; }
+.silaba:nth-child(3n) { color: #20a05c; box-shadow: 0 1vmin 0 #a5e8bf; }
+.silaba.usada { opacity: .25; }
+
+/* ---------- Cozinha dos avós ---------- */
+.cozinha { background: linear-gradient(#fff1e6 0 62%, #f6d6c2 62%); background-image: linear-gradient(transparent 61.5%, #e8b49a 61.5% 62.5%, transparent 62.5%), repeating-linear-gradient(90deg, #fff1e6 0 6vmin, #ffe6d5 6vmin 12vmin); }
+.avos { position: absolute; left: 1%; top: 2%; width: 27%; display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-end; }
+.avo { width: 16vmin; height: 27vmin; }
+.avos .balao { width: 100%; margin-top: 1vmin; text-align: center; font-size: 1.05em; }
+.receitas { position: absolute; left: 30%; right: 3%; top: 6%; bottom: 6%; display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.5vmin; }
+.card-receita { background: #fff; border-radius: 3vmin; box-shadow: 0 1vmin 0 var(--cor-sombra); font-weight: 900; font-size: 1.2em; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.receita-icone { font-size: 13vmin; line-height: 1.1; }
+.receita-lista { position: absolute; right: 2%; top: 3%; width: 22%; background: #fff; border-radius: 2vmin; padding: 1.5vmin 2vmin; box-shadow: 0 .6vmin 0 var(--cor-sombra); display: flex; flex-direction: column; gap: .6vmin; }
+.ing-linha { font-weight: 700; padding: .2em .4em; border-radius: 1vmin; }
+.ing-linha.feito { background: #d8f5e1; text-decoration: line-through; opacity: .7; }
+.centro-cozinha { position: absolute; left: 30%; right: 26%; top: 2%; height: 56%; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.tigela { position: relative; width: 30vmin; height: 26vmin; display: flex; align-items: flex-end; justify-content: center; }
+.tigela-emoji { font-size: 24vmin; line-height: 1; }
+.tigela-conteudo { position: absolute; top: 18%; left: 0; right: 0; display: flex; justify-content: center; font-size: 6vmin; z-index: 1; }
+.mexer-barra { width: 30vmin; height: 2.6vmin; background: #fff; border-radius: 2vmin; overflow: hidden; margin-top: 1vmin; visibility: hidden; }
+.mexer-barra.ativa { visibility: visible; }
+.mexer-barra div { height: 100%; width: 0; background: linear-gradient(90deg, #ffd60a, var(--cor)); transition: width .3s; }
+.forno { width: 32vmin; height: 30vmin; background: #e5e5ee; border-radius: 3vmin; border: 1vmin solid #b8b8c8; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.forno-porta { width: 80%; height: 60%; background: #333; border-radius: 2vmin; display: flex; align-items: center; justify-content: center; font-size: 12vmin; color: #ffd60a; font-weight: 900; }
+.forno.quente .forno-porta { background: radial-gradient(#ff9f1c, #c1121f); }
+.forno-nome { font-weight: 900; margin-top: 1vmin; }
+.bancada { position: absolute; left: 2%; right: 2%; bottom: 3%; height: 34%; background: #c58b5c; border-radius: 2vmin; border-top: 1.4vmin solid #8d5a3b; display: flex; align-items: center; justify-content: center; gap: 1.5vmin; padding: 1vmin; flex-wrap: wrap; transition: opacity .3s; }
+.bancada.apagada { opacity: .35; pointer-events: none; }
+.ingrediente { width: 15vmin; height: 19vmin; background: #fff; border-radius: 2vmin; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 .6vmin 0 #8d5a3b; }
+.ing-emoji { font-size: 11vmin; line-height: 1; }
+.ing-nome { font-size: .75em; font-weight: 800; }
+.ingrediente.usado { visibility: hidden; }
+
+/* ---------- Casa da Nina ---------- */
+.camarim { background: linear-gradient(135deg, #f8e1ff, var(--cor-fundo)); }
+.palco { position: absolute; left: 0; top: 0; bottom: 0; width: 42%; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 3vh; }
+.avatar-grande { width: 34vmin; height: 66vh; }
+.prima { position: absolute; right: 2%; top: 3%; width: 32%; display: flex; flex-direction: column; align-items: center; }
+.prima-desenho { width: 16vmin; height: 26vmin; }
+.prima .balao { font-size: .9em; text-align: center; margin-top: -1vmin; }
+.btn-foto { position: absolute; left: 3%; top: 4%; }
+.flash { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; z-index: 30; }
+.flash.ativo { animation: flash .6s ease-out; }
+@keyframes flash { 0% { opacity: .95 } 100% { opacity: 0 } }
+.painel { position: absolute; right: 1.5%; top: 2%; bottom: 2%; width: 56%; background: #fff; border-radius: 3vmin; box-shadow: 0 1vmin 3vmin rgba(157,78,221,.2); display: flex; flex-direction: column; overflow: hidden; }
+.abas { display: flex; gap: 1vmin; padding: 1.5vmin; background: #f3e8ff; }
+.aba { flex: 1; padding: .5em; border-radius: 1.5vmin; font-weight: 900; background: #fff; }
+.aba.ativa { background: var(--cor2); color: #fff; }
+.grade-opcoes { flex: 1; overflow-y: auto; padding: 1vmin 2vmin 2vmin; }
+.grupo-titulo { font-weight: 900; color: var(--cor2-escura); margin: 1.2vmin 0 .6vmin; font-size: 1.1em; }
+.linha-opcoes { display: flex; flex-wrap: wrap; gap: 1.5vmin; }
+.opcao { position: relative; width: 14vmin; border-radius: 2vmin; background: #faf5ff; border: .6vmin solid transparent; padding: .8vmin; display: flex; flex-direction: column; align-items: center; }
+.opcao.sel { border-color: var(--cor); background: var(--cor-fundo); }
+.opcao-img { width: 11vmin; height: 11vmin; }
+.altas .opcao-img { height: 17vmin; }
+.opcao-nome { font-size: .7em; font-weight: 800; text-align: center; line-height: 1.1; margin-top: .4vmin; }
+.opcao.trancada .opcao-img { filter: grayscale(.8) opacity(.5); }
+.cadeado-mini { position: absolute; top: .4vmin; right: .4vmin; background: #fff7d1; border-radius: 1em; font-size: .65em; font-weight: 900; padding: .1em .4em; }
+.amostra { width: 80%; height: 80%; margin: 10%; border-radius: 50%; border: .6vmin solid #fff; box-shadow: 0 0 0 .3vmin #ddd; }
+.emoji-item { font-size: 9vmin; display: flex; align-items: center; justify-content: center; height: 100%; }
+
+/* ---------- Mercado ---------- */
+.mercado { background: linear-gradient(#e9fbf4 0 75%, #cfd8dc 75%); }
+.lado-mercado { position: absolute; left: 2%; top: 3%; bottom: 3%; width: 27%; display: flex; flex-direction: column; gap: 2vmin; }
+.lista-compras { background: #fffef0; border-radius: 2vmin; padding: 1.5vmin 2vmin; box-shadow: 0 .8vmin 0 #e0dca8; background-image: repeating-linear-gradient(transparent 0 5.4vmin, #d6eaff 5.4vmin 5.7vmin); }
+.lista-titulo { font-weight: 900; font-size: 1.2em; color: #e63946; margin-bottom: .6vmin; }
+.lista-item { display: flex; align-items: center; gap: 1vmin; font-size: 1.3em; font-weight: 800; padding: .3vmin 1vmin; border-radius: 1vmin; }
+.lista-item.atual { background: #ffe066; animation: pulsar 1.2s infinite; }
+.lista-item.feito { opacity: .6; text-decoration: line-through; }
+.lista-nome { flex: 1; }
+.btn-som-mini { font-size: 4vmin; }
+.carrinho { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; }
+.carrinho-itens { display: flex; flex-wrap: wrap; justify-content: center; font-size: 5vmin; margin-bottom: -4vmin; z-index: 1; max-width: 22vmin; }
+.carrinho-emoji { font-size: 16vmin; line-height: 1; }
+.prateleira-mercado { position: absolute; left: 31%; right: 2%; top: 3%; bottom: 3%; display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(3, 1fr); gap: 1.5vmin; background: #8d5a3b; padding: 1.5vmin; border-radius: 2vmin; }
+.fruta { background: #fdf3e7; border-radius: 1.5vmin; border-bottom: 1.4vmin solid #c58b5c; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; }
+.fruta-emoji { font-size: 10vmin; line-height: 1; }
+.fruta-nome { position: absolute; bottom: .4vmin; font-weight: 900; font-size: .9em; background: #fff; border-radius: 1em; padding: 0 .5em; opacity: 0; transition: opacity .2s; }
+.fruta.mostra .fruta-nome { opacity: 1; }
+
+/* ---------- Shopping ---------- */
+.shopping { background: linear-gradient(135deg, var(--fundo-loja1), var(--fundo-loja2)); display: flex; }
+.abas-loja { width: 14%; display: flex; flex-direction: column; gap: 1.2vmin; padding: 1.5vmin; }
+.abas-loja .aba { display: flex; flex-direction: column; align-items: center; font-size: .9em; padding: .4em; flex: 1; }
+.aba-ic { font-size: 5vmin; }
+.vitrine { flex: 1; overflow-y: auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(19vmin, 1fr)); gap: 2vmin; padding: 2vmin; align-content: start; }
+.produto { background: #fff; border-radius: 2.5vmin; padding: 1.2vmin; display: flex; flex-direction: column; align-items: center; box-shadow: 0 .8vmin 0 var(--cor2-sombra); }
+.produto-img { width: 14vmin; height: 14vmin; }
+.produto-img.alta { height: 22vmin; }
+.produto-img.grande { width: 24vmin; height: 24vmin; margin: 0 auto; }
+.produto-img.grande.alta { height: 36vmin; }
+.produto-nome { font-weight: 800; font-size: .85em; text-align: center; margin: .6vmin 0; line-height: 1.1; }
+.preco { background: #ffd60a; border-radius: 1em; padding: .15em .7em; font-weight: 900; }
+.produto.meu .preco { background: #d8f5e1; color: #20a05c; }
+.produto.caro { opacity: .55; }
+
+/* ---------- Quintal do Batata ---------- */
+.quintal { background: linear-gradient(#a8dcff 0 40%, #7fd36f 40%); }
+.cerca { position: absolute; left: 0; right: 0; top: 30%; height: 12%; background: repeating-linear-gradient(90deg, #fff 0 2.4vmin, transparent 2.4vmin 5vmin); border-top: 1vmin solid #fff; border-bottom: 1vmin solid #fff; opacity: .9; }
+.casinha { position: absolute; right: 4%; top: 22%; font-size: 16vmin; }
+.crianca-quintal { position: absolute; left: 3%; bottom: 10%; width: 22vmin; height: 40vmin; }
+.pote { position: absolute; left: 22%; bottom: 6%; font-size: 9vmin; }
+.racao { position: absolute; top: -1vmin; left: 50%; transform: translateX(-50%); font-size: 4vmin; opacity: 0; transition: opacity .3s; }
+.racao::before { content: "🍖"; }
+.pote.cheio .racao { opacity: 1; }
+.dog { position: absolute; left: 38%; bottom: 7%; width: 34vmin; height: 27vmin; transition: left .9s ease-in-out; }
+.dog-inner { width: 100%; height: 100%; transition: transform .2s; }
+.dog-inner.direita { transform: scaleX(-1); }
+.dog.vai-comer { left: 26%; }
+.dog.vai-pegar { left: 66%; }
+.dog.comendo .dog-inner { animation: comer .3s ease-in-out infinite; }
+@keyframes comer { 0%,100% { transform: rotate(0) } 50% { transform: rotate(-6deg) translateY(4%) } }
+.dog.correndo .dog-inner svg { animation: flutuar .25s infinite; }
+.batata-svg .rabo { transform-origin: 172px 98px; animation: balancar .5s ease-in-out infinite; }
+.brinquedo-dog { position: absolute; left: 20%; bottom: 40%; font-size: 7vmin; z-index: 2; }
+.brinquedo-dog.jogado { animation: arremesso .9s ease-out forwards; }
+.brinquedo-dog.sumiu { opacity: 0; }
+@keyframes arremesso { 0% { left: 20%; bottom: 40% } 50% { left: 55%; bottom: 70% } 100% { left: 84%; bottom: 10% } }
+.barras-batata { position: absolute; right: 3%; bottom: 46%; background: rgba(255,255,255,.9); border-radius: 2vmin; padding: 1.5vmin; display: flex; flex-direction: column; gap: 1vmin; font-size: 1.1em; }
+.barras-batata .barra-fundo { width: 20vmin; height: 3vmin; }
+.botoes-batata { position: absolute; left: 50%; top: 3%; transform: translateX(-50%); display: flex; gap: 2vmin; }
+.opcoes-batata { position: absolute; left: 2%; top: 3%; background: rgba(255,255,255,.85); border-radius: 2vmin; padding: 1vmin 1.5vmin; }
+.opcoes-batata:empty { display: none; }
+.mini-titulo { font-weight: 900; font-size: .8em; }
+.mini-linha { display: flex; gap: 1vmin; margin-bottom: .6vmin; }
+.mini-opcao { font-size: 4.5vmin; width: 7vmin; height: 7vmin; background: #fff; border-radius: 1.5vmin; border: .5vmin solid transparent; }
+.mini-opcao.sel { border-color: var(--cor); }
+
+/* ---------- Ilha ---------- */
+.praia { background: #a8e4ff; }
+.sol { position: absolute; right: 6%; top: 3%; font-size: 13vmin; animation: pulsar 3s infinite; }
+.mar-praia { position: absolute; left: 0; right: 0; top: 18%; height: 22%; background: linear-gradient(#2f9be0, #5ec8f2); overflow: hidden; }
+.onda { position: absolute; left: -10%; right: -10%; bottom: -2vmin; height: 4vmin; background: radial-gradient(circle at 2vmin 0, transparent 2vmin, #fff 2.1vmin) 0 0 / 4vmin 4vmin repeat-x; animation: flutuar 2s infinite; }
+.barco { position: absolute; top: 15%; font-size: 7vmin; animation: nadar 25s linear infinite; }
+.areia { position: absolute; left: 0; right: 0; top: 40%; bottom: 0; background: radial-gradient(circle at 30% 60%, #ffe8a3 0, transparent 40%), #f9d77e; }
+.palmeira { position: absolute; left: 1%; top: 18%; font-size: 26vmin; pointer-events: none; }
+.crianca-praia { position: absolute; left: 14%; bottom: 3%; width: 16vmin; height: 30vmin; pointer-events: none; z-index: 1; }
+.batata-praia { position: absolute; left: 26%; bottom: 3%; width: 18vmin; height: 14vmin; pointer-events: none; z-index: 1; }
+.praia > .btn-grande { position: absolute; left: 50%; top: 62%; transform: translate(-50%,-50%); z-index: 3; animation: pulsar 1.2s infinite; }
+.placar { position: absolute; left: 50%; top: 2%; transform: translateX(-50%); background: #fff; border-radius: 2vmin; padding: .3em 1em; font-weight: 900; font-size: 1.6em; white-space: pre; z-index: 3; }
+.placar:empty { display: none; }
+.tesouro { position: absolute; font-size: 8vmin; z-index: 2; transform: translate(-50%,-50%); animation: aparecer .3s ease-out; }
+.tesouro.anda { animation: aparecer .3s ease-out, andarCaranguejo 1s ease-in-out infinite alternate; }
+.tesouro.pego { transition: transform .3s, opacity .3s; transform: translate(-50%,-50%) scale(1.8); opacity: 0; }
+@keyframes aparecer { from { transform: translate(-50%,-50%) scale(0) } to { transform: translate(-50%,-50%) scale(1) } }
+@keyframes andarCaranguejo { from { margin-left: -3vmin } to { margin-left: 3vmin } }
+.mais { position: absolute; font-size: 5vmin; font-weight: 900; color: var(--cor); z-index: 3; pointer-events: none; animation: subir .6s ease-out forwards; }
+.praia.fechada > *:not(.painel-info) { filter: grayscale(.7) blur(1px); }
+
+/* ---------- Tablet em pé ---------- */
+#girar { display: none; }
+@media (orientation: portrait) {
+  #girar { display: flex; position: fixed; inset: 0; z-index: 999; background: #7ec8ff; color: #fff; font-weight: 900; font-size: 6vmin; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+  #girar div { font-size: 20vmin; }
+}

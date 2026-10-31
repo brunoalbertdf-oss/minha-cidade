@@ -1,0 +1,85 @@
+/* ===================== Cadastro, versão menino e oficina de montar ===================== */
+
+/* ---------- Cadastro ---------- */
+.cadastro {
+  position: absolute; inset: 0; overflow-y: auto; -webkit-overflow-scrolling: touch;
+  padding: 3vmin max(4vw, env(safe-area-inset-left)) 6vmin; background: linear-gradient(#7ec8ff, #c8ecff 60%, #fff3c4);
+}
+.cadastro h1 { margin: 0; color: #fff; font-size: 2.2em; text-shadow: 0 .6vmin 0 var(--cor); text-align: center; }
+.cadastro h2 { margin: 3vmin 0 1.5vmin; color: #3d2c5e; font-size: 1.35em; }
+.cad-sub { text-align: center; margin: 1vmin 0 0; font-weight: 700; }
+.cad-sexo { display: flex; gap: 3vmin; justify-content: center; }
+.cad-cartao { width: 26vmin; background: #fff; border-radius: 3vmin; padding: 1.5vmin; border: .8vmin solid transparent; box-shadow: 0 1vmin 0 rgba(0,0,0,.1); display: flex; flex-direction: column; align-items: center; font-size: 1.3em; }
+.cad-cartao.sel { border-color: var(--cor); background: var(--cor-fundo); transform: scale(1.04); }
+.cad-cartao-img { width: 18vmin; height: 26vmin; }
+.cad-grade { display: grid; grid-template-columns: 1fr 1fr; gap: 2vmin 3vmin; }
+.cad-campo { display: flex; flex-direction: column; gap: .6vmin; font-weight: 800; }
+.cad-campo input {
+  font: inherit; font-size: max(16px, 1.1em); font-weight: 700; padding: .5em .7em; border-radius: 1.5vmin; border: .5vmin solid #cdb4db; background: #fff; color: #3d2c5e;
+  -webkit-user-select: text; user-select: text;
+}
+.cad-campo input:focus { outline: none; border-color: var(--cor); }
+.cad-escolha { display: flex; gap: 1vmin; }
+.cad-opcao { flex: 1; padding: .35em; border-radius: 1.5vmin; background: #fff; font-weight: 800; border: .4vmin solid #e0d4ec; }
+.cad-opcao.sel { background: var(--cor2); color: #fff; border-color: var(--cor2-escura); }
+.cad-visual { display: flex; align-items: center; gap: 4vmin; }
+.cad-rotulo { font-weight: 800; margin: 1vmin 0; }
+.cad-cores { display: flex; gap: 1.5vmin; flex-wrap: wrap; }
+.cad-cor { width: 8vmin; height: 8vmin; min-width: 36px; min-height: 36px; border-radius: 50%; border: .6vmin solid #fff; box-shadow: 0 0 0 .3vmin #ccc; }
+.cad-cor.sel { box-shadow: 0 0 0 .8vmin var(--cor); }
+.cad-previa { width: 18vmin; height: 28vmin; }
+.cad-botoes { display: flex; gap: 3vmin; justify-content: center; margin-top: 4vmin; }
+body.cadastrando #girar { display: none !important; }
+@media (orientation: portrait) {
+  .cad-grade { grid-template-columns: 1fr; }
+  .cad-cartao { width: 38vmin; }
+  .cad-cartao-img { width: 26vmin; height: 36vmin; }
+}
+
+/* ---------- Cores da versão menino: azul no lugar do rosa, verde-água no lugar do lilás ---------- */
+body.menino {
+  --cor: #3a86ff; --cor-clara: #6aa8ff; --cor-escura: #1d4ed8; --cor-fundo: #e2f1ff; --cor-borda: #7fb5ff;
+  --cor-sombra: #a9cbff; --cor-sombra2: #a9cbff;
+  --cor2: #06b6a0; --cor2-escura: #05907f; --cor2-funda: #036b5e; --cor2-clara: #3fd9c2; --cor2-sombra: #b8ece4;
+  --fundo-loja1: #d7f0ff; --fundo-loja2: #e8fff6;
+}
+
+/* ---------- Quarto e oficina de menino ---------- */
+.quarto.menino .parede { background: repeating-linear-gradient(90deg, #cfe8ff 0 4vmin, #e2f1ff 4vmin 8vmin); }
+.quarto.menino .cama-cabeceira { background: #3a86ff; }
+.quarto.menino .coberta { background: repeating-linear-gradient(45deg, #06d6a0 0 2vmin, #4cc9f0 2vmin 4vmin); }
+.quarto.menino .cama-colchao { box-shadow: 0 1.5vmin 0 #1d4ed8; }
+.camarim.oficina { background: linear-gradient(135deg, #d7f0ff, #fff3c4); }
+.oficina .aba.ativa { background: #3a86ff; }
+.oficina .grupo-titulo { color: #1d4ed8; }
+.oficina .painel { box-shadow: 0 1vmin 3vmin rgba(58,134,255,.25); }
+.oficina .abas { background: #e2f1ff; }
+
+/* ---------- Montar brinquedos ---------- */
+.montagens { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2vmin; }
+.card-montagem { background: #f0f7ff; border-radius: 2.5vmin; padding: 2vmin; font-weight: 900; font-size: 1.2em; box-shadow: 0 .8vmin 0 #a9cbff; color: #1d4ed8; }
+.card-montagem-ic { font-size: 10vmin; line-height: 1.1; }
+.montar-topo { display: flex; align-items: center; gap: 2vmin; margin: .5vmin 0 1.5vmin; font-size: 1.2em; }
+.btn-mini { font-size: .8em; padding: .3em .8em; }
+.montar-area { display: flex; gap: 2vmin; justify-content: center; }
+.tabuleiro, .bandeja { position: relative; width: min(23vw, 50vh); aspect-ratio: 1; border-radius: 2vmin; }
+.tabuleiro { background: #fffdf5; border: .5vmin solid #ffd166; }
+.bandeja { background: repeating-linear-gradient(45deg, #f1f3f5 0 2vmin, #e9ecef 2vmin 4vmin); border: .5vmin dashed #adb5bd; }
+.bandeja::before { content: "Peças"; position: absolute; top: -.2vmin; right: 1vmin; font-size: .7em; font-weight: 800; color: #868e96; }
+.vaga, .peca { position: absolute; }
+.peca { transform: rotate(var(--r)); touch-action: none; cursor: grab; z-index: 2; filter: drop-shadow(0 .5vmin 0 rgba(0,0,0,.15)); }
+.peca.arrastando { z-index: 50; filter: drop-shadow(0 1.5vmin 1vmin rgba(0,0,0,.25)); }
+.vaga:not(.cheia) { z-index: 1; }   /* lugares vazios ficam visíveis por cima das peças já encaixadas */
+.tabuleiro.pronto { box-shadow: 0 0 0 .8vmin #ffd60a, 0 0 4vmin #ffd60a; }
+.tabuleiro.anim-acenar { animation: acenar .5s ease-in-out 4; }
+.tabuleiro.anim-andar { animation: andarCarro 1.6s ease-in-out 2; }
+.tabuleiro.anim-decolar { animation: decolar 1.8s ease-in-out; }
+.tabuleiro.anim-pular { animation: pulo .5s ease 3; }
+@keyframes acenar { 0%,100% { transform: rotate(0) } 25% { transform: rotate(-5deg) } 75% { transform: rotate(5deg) } }
+@keyframes andarCarro { 0%,100% { transform: translateX(0) } 30% { transform: translateX(14%) } 70% { transform: translateX(-14%) } }
+@keyframes decolar { 0% { transform: translateY(0) } 50% { transform: translateY(-40%) scale(.9) } 100% { transform: translateY(0) } }
+
+/* ---------- Celular (tela baixa) ---------- */
+@media (max-height: 500px) {
+  .cadastro { font-size: 14px; }
+}
